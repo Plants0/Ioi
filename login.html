@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تسجيل الدخول</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    h1 {
+      background-color: #007bff;
+      color: white;
+      padding: 10px;
+    }
+
+    section {
+      margin: 20px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #fff;
+      max-width: 400px;
+    }
+
+    input {
+      display: block;
+      width: calc(100% - 20px);
+      margin: 10px auto;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    a {
+      display: block;
+      margin-top: 20px;
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+  </style>
+  <script type="module">
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyB8vOLW7XHrtgumRfsw0P5PEwoXODgLFdg",
+      authDomain: "my-ecommerce-site-6995a.firebaseapp.com",
+      projectId: "my-ecommerce-site-6995a",
+      storageBucket: "my-ecommerce-site-6995a.firebasestorage.app",
+      messagingSenderId: "574140788633",
+      appId: "1:574140788633:web:b68c91826b5e4f98082d08",
+      measurementId: "G-999XFYMTJW"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // التحقق من حالة تسجيل الدخول عند تحميل الصفحة
+    window.onload = () => {
+      const user = auth.currentUser;
+      if (user) {
+        window.location.href = "index.html"; // إذا كان المستخدم مسجل الدخول، يتم توجيههم إلى الصفحة الرئيسية
+      }
+    };
+
+    document.getElementById("login-btn").addEventListener("click", async () => {
+      const email = document.getElementById("login-email").value;
+      const password = document.getElementById("login-password").value;
+      const errorMessage = document.getElementById("error-message");
+
+      errorMessage.textContent = "";  // إعادة تعيين رسالة الخطأ
+
+      if (!email || !password) {
+        errorMessage.textContent = "يرجى إدخال جميع الحقول.";
+        return;
+      }
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        alert("تم تسجيل الدخول بنجاح!");
+        window.location.href = "index.html"; // إعادة توجيه إلى الصفحة الرئيسية بعد تسجيل الدخول
+      } catch (error) {
+        errorMessage.textContent = "خطأ: " + error.message;
+      }
+    });
+  </script>
+</head>
+<body>
+  <h1>تسجيل الدخول</h1>
+  <section>
+    <h2>تسجيل الدخول إلى حسابك</h2>
+    <input type="email" id="login-email" placeholder="أدخل بريدك الإلكتروني" required>
+    <input type="password" id="login-password" placeholder="أدخل كلمة المرور" required>
+    <button id="login-btn">تسجيل الدخول</button>
+    <p id="error-message" class="error-message"></p> <!-- عرض رسالة الخطأ هنا -->
+  </section>
+  <a href="register.html">ليس لديك حساب؟ قم بإنشاء حساب هنا</a>
+</body>
+</html>

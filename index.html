@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>إنشاء حساب</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    h1 {
+      background-color: #007bff;
+      color: white;
+      padding: 10px;
+    }
+
+    section {
+      margin: 20px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #fff;
+      max-width: 400px;
+    }
+
+    input {
+      padding: 10px;
+      width: 100%;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    .login-link {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .login-link a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+  <script type="module">
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyB8vOLW7XHrtgumRfsw0P5PEwoXODgLFdg",
+      authDomain: "my-ecommerce-site-6995a.firebaseapp.com",
+      projectId: "my-ecommerce-site-6995a",
+      storageBucket: "my-ecommerce-site-6995a.firebasestorage.app",
+      messagingSenderId: "574140788633",
+      appId: "1:574140788633:web:b68c91826b5e4f98082d08",
+      measurementId: "G-999XFYMTJW"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    document.getElementById("register-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const errorMessage = document.getElementById("error-message");
+      const submitButton = document.getElementById("submit-btn");
+
+      // تعطيل الزر لمنع الضغط عليه مرة أخرى أثناء عملية التسجيل
+      submitButton.disabled = true;
+
+      try {
+        // إنشاء الحساب
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        
+        console.log("تم إنشاء الحساب بنجاح!", user); // التأكد من أن الحساب تم إنشاؤه بنجاح
+
+        // التوجيه إلى صفحة تسجيل الدخول فور إتمام العملية
+        window.location.href = "login.html"; // الانتقال مباشرة إلى صفحة تسجيل الدخول
+      } catch (error) {
+        // تفعيل الزر مرة أخرى في حال حدوث خطأ
+        submitButton.disabled = false;
+
+        // عرض رسالة الخطأ في حال فشل التسجيل
+        if (error.code === "auth/email-already-in-use") {
+          errorMessage.textContent = "البريد الإلكتروني هذا مستخدم بالفعل!";
+        } else {
+          errorMessage.textContent = "خطأ: " + error.message;
+        }
+
+        console.error("حدث خطأ:", error); // تسجيل الخطأ في الكونسول للمساعدة في التشخيص
+      }
+    });
+  </script>
+</head>
+<body>
+  <h1>إنشاء حساب</h1>
+  <section>
+    <form id="register-form">
+      <input type="email" id="email" placeholder="البريد الإلكتروني" required>
+      <input type="password" id="password" placeholder="كلمة المرور" required>
+      <button type="submit" id="submit-btn">إنشاء حساب</button>
+      <p id="error-message" class="error-message"></p> <!-- عرض رسالة الخطأ هنا -->
+    </form>
+
+    <!-- رابط التوجيه لصفحة تسجيل الدخول -->
+    <div class="login-link">
+      <p>هل لديك حساب؟ <a href="login.html">سجل الدخول</a></p>
+    </div>
+  </section>
+</body>
+</html>

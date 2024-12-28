@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تسجيل الخروج</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    h1 {
+      background-color: #007bff;
+      color: white;
+      padding: 10px;
+    }
+
+    section {
+      margin: 20px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #fff;
+      max-width: 400px;
+    }
+
+    button {
+      padding: 10px 20px;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 10px 0;
+      width: 100%;
+    }
+
+    /* زر العودة */
+    #back-btn {
+      background-color: #007bff;
+    }
+
+    #back-btn:hover {
+      background-color: #0056b3;
+    }
+
+    /* زر تسجيل الخروج */
+    #logout-btn {
+      background-color: #dc3545; /* اللون الأحمر */
+    }
+
+    #logout-btn:hover {
+      background-color: #c82333; /* اللون الأحمر الداكن عند المرور */
+    }
+
+    .error-message {
+      color: red;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+  </style>
+  <script type="module">
+    import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyB8vOLW7XHrtgumRfsw0P5PEwoXODgLFdg",
+      authDomain: "my-ecommerce-site-6995a.firebaseapp.com",
+      projectId: "my-ecommerce-site-6995a",
+      storageBucket: "my-ecommerce-site-6995a.firebasestorage.app",
+      messagingSenderId: "574140788633",
+      appId: "1:574140788633:web:b68c91826b5e4f98082d08",
+      measurementId: "G-999XFYMTJW"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // التحقق من حالة تسجيل الدخول عند تحميل الصفحة
+    window.onload = () => {
+      const user = auth.currentUser;
+      if (!user) {
+        window.location.href = "login.html"; // إذا لم يكن هناك مستخدم مسجل الدخول، يتم توجيههم إلى صفحة تسجيل الدخول
+      }
+    };
+
+    // تسجيل الخروج عند الضغط على الزر
+    document.getElementById("logout-btn").addEventListener("click", async () => {
+      const errorMessage = document.getElementById("error-message");
+
+      try {
+        await signOut(auth);
+        alert("تم تسجيل الخروج بنجاح!");
+        window.location.href = "login.html"; // إعادة توجيه إلى صفحة تسجيل الدخول بعد تسجيل الخروج
+      } catch (error) {
+        errorMessage.textContent = "خطأ: " + error.message;
+      }
+    });
+
+    // العودة إلى الصفحة الرئيسية
+    document.getElementById("back-btn").addEventListener("click", () => {
+      window.location.href = "index.html"; // العودة إلى الصفحة الرئيسية
+    });
+  </script>
+</head>
+<body>
+  <h1>تسجيل الخروج</h1>
+  <section>
+    <h2>هل أنت متأكد أنك تريد تسجيل الخروج؟</h2>
+    <button id="back-btn">العودة إلى الصفحة الرئيسية</button> <!-- زر العودة إلى الصفحة الرئيسية -->
+    <button id="logout-btn">تسجيل الخروج</button> <!-- زر تسجيل الخروج باللون الأحمر -->
+    <p id="error-message" class="error-message"></p> <!-- عرض رسالة الخطأ هنا -->
+  </section>
+</body>
+</html>
